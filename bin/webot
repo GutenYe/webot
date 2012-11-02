@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/webot"
+
+begin
+  Webot::CLI.start
+rescue Interrupt => e
+  Webot.ui.say "\nQuitting..."
+  Webot.ui.debug e.backtrace.join("\n")
+  exit 1
+rescue Exception => e
+  Webot.ui.error "#{e.class.name}: #{e.message}"
+  Webot.ui.say e.backtrace.join("\n")
+  exit 1
+end
