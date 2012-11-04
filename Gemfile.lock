@@ -1,7 +1,7 @@
 PATH
   remote: /home/guten/dev/one/tagen
   specs:
-    tagen (2.0.1)
+    tagen (2.0.2)
       activesupport
       pd
 

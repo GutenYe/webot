@@ -17,6 +17,7 @@ module Webot
     def bonus(*sites)
       sites = sites.empty? ? Rc.sites : sites
       agent = Site.init_agent
+      err_counts = 0
 
       sites.each {|name|
         unless Site.has_site?(name)
@@ -26,8 +27,19 @@ module Webot
 
         Webot.ui.say "Performing #{name} ..."
         site = Site[name].new(agent)
-        site.bonus
+        begin
+          err = site.bonus
+        rescue Watir::Wait::TimeoutError => e
+          Saber.ui.error "SKIP: #{e.mesage}"
+          err_counts += 1
+        else
+          err_counts += unless err
+        end
       }
+
+      if err_counts == 0
+        agent.quit
+      end
     end
   end
 end
