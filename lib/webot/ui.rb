@@ -1,27 +1,28 @@
 module Webot
   class UI
     def warn(msg)
-			raise NotImplementedError
+      puts msg
     end
 
     def debug(msg)
-			raise NotImplementedError
+      puts msg
     end
 
     def error(msg)
-			raise NotImplementedError
+      puts msg
     end
 
     def error!(msg)
-			raise NotImplementedError
+      puts msg
+      exit 1
     end
 
     def info(msg)
-			raise NotImplementedError
+      puts msg
     end
 
     def confirm(msg)
-			raise NotImplementedError
+      puts msg
     end
 
     # alias to info.

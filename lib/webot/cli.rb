@@ -13,6 +13,7 @@ module Webot
       Webot.ui.debug! if options["verbose"]
     end
 
+
     desc "bonus [site ..]", "bonus"
     def bonus(*sites)
       sites = sites.empty? ? Rc.sites : sites
@@ -33,7 +34,7 @@ module Webot
           Saber.ui.error "SKIP: #{e.mesage}"
           err_counts += 1
         else
-          err_counts += unless err
+          err_counts += 1 unless err
         end
       }
 
