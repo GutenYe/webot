@@ -13,14 +13,31 @@ module Webot
       Webot.ui.debug! if options["verbose"]
     end
 
-
     desc "bonus [site ..]", "bonus"
     def bonus(*sites)
-      sites = sites.empty? ? Rc.sites : sites
+      @sites = sites.empty? ? Rc.sites : sites
+
+      run_sites { |site|
+        site.bonus
+      }
+    end
+
+    desc "activity [site ..]", "activity"
+    def activity(*sites)
+      @sites = sites.empty? ? Rc.activities : sites
+
+      run_sites { |site|
+        site.activity
+      }
+    end
+
+  private
+
+    def run_sites(&blk)
       agent = Site.init_agent
       err_counts = 0
 
-      sites.each {|name|
+      @sites.each {|name|
         unless Site.has_site?(name)
           Webot.ui.error "SKIP: can't find site -- #{name}"
           next
@@ -29,9 +46,9 @@ module Webot
         Webot.ui.say "Performing #{name} ..."
         site = Site[name].new(agent)
         begin
-          err = site.bonus
-        rescue Watir::Wait::TimeoutError => e
-          Saber.ui.error "SKIP: #{e.mesage}"
+          err = blk.call(site)
+        rescue Timeout::Error, Watir::Wait::TimeoutError => e
+          Webot.ui.error "SKIP: #{e.message}"
           err_counts += 1
         else
           err_counts += 1 unless err
